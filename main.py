@@ -6,7 +6,7 @@ from pybricks.parameters import (Port, Stop, Direction, Button, Color,
                                  SoundFile, ImageFile, Align)
 from pybricks.tools import print, wait, StopWatch
 from pybricks.robotics import DriveBase
-
+from threading import Thread
 
 # This program requires LEGO EV3 MicroPython v2.0 or higher.
 # Click "Open user guide" on the EV3 extension tab for more information.
@@ -55,7 +55,21 @@ def lijnbeweging(b):
 # brengt de pen naar beneden
 penM.run_angle(250, -900)
 
-# laat de pen op en af bewegen,
+# functie voor prallel programmeren
+def loop():
+    while run==True:
+        if Button.UP in brick.buttons():
+            penM.run_angle(25, 5)
+        elif Button.DOWN in brick.buttons():
+            penM.run_angle(-25, 5)
+
+# we maken een vertakking
+run=True
+t = Thread(target=loop)
+t.start()
+
+# de rest van de code die parallel loopt met de vertakking...
+# laat de pen op en af bewegen
 while not Button.CENTER in brick.buttons() :
     wait(250)
     lijnbeweging(0)
@@ -63,6 +77,9 @@ while not Button.CENTER in brick.buttons() :
     wait(250)
     lijnbeweging(lijn_breedte)
     lijn_pos = lijn_breedte
+
+# na een actie wordt het programma gestopt en dus ook de vertakking
+run=False
 # als de middelste knop wordt ingeduwd, dan gaat de pen weer naar het midden en komt deze terug omhoog
 lijnbeweging(525)
 penM.run_angle(250, 1080)

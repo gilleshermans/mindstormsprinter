@@ -8,9 +8,6 @@ from pybricks.tools import print, wait, StopWatch
 from pybricks.robotics import DriveBase
 from threading import Thread
 
-# This program requires LEGO EV3 MicroPython v2.0 or higher.
-# Click "Open user guide" on the EV3 extension tab for more information.
-
 # lettergroottes instellen
 def l1(seg1):
     return seg1 * 1
